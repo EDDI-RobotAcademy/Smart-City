@@ -92,8 +92,8 @@ SemaphoreHandle_t sem;
 /* USER CODE BEGIN (2) */
 /* USER CODE END */
 
-uint8   emacAddress[6U] =   {0x00U, 0x08U, 0xeeU, 0x03U, 0xa6U, 0x6cU};
-uint32  emacPhyAddress  =   1U;
+uint8	emacAddress[6U] = 	{0x00U, 0x08U, 0xeeU, 0x03U, 0xa6U, 0x6cU};
+uint32 	emacPhyAddress	=	1U;
 
 int main(void)
 {
@@ -114,10 +114,8 @@ int main(void)
 
     sem = xSemaphoreCreateBinary();
     xSemaphoreGive(sem);
-    //EMAC_LwIP_Main(emacAddress);
 
     /* Create Task 1 */
-    //    if (xTaskCreate(vTask1,"Task1", configMINIMAL_STACK_SIZE, NULL, 1, &xTask1Handle) != pdTRUE)
     if (xTaskCreate(vTask1,"Task1", configMINIMAL_STACK_SIZE, NULL,  ((configMAX_PRIORITIES-1)|portPRIVILEGE_BIT), &xTask1Handle) != pdTRUE)
     {
         /* Task could not be created */
@@ -130,20 +128,7 @@ int main(void)
         /* Task could not be created */
         while(1);
     }
-//    /* Create Task 1 */
-//    //    if (xTaskCreate(vTask1,"Task1", configMINIMAL_STACK_SIZE, NULL, 1, &xTask1Handle) != pdTRUE)
-//    if (xTaskCreate(vTask1,"Task1", configMINIMAL_STACK_SIZE, NULL,  1, &xTask1Handle) != pdTRUE)
-//    {
-//        /* Task could not be created */
-//        while(1);
-//    }
-//
-//    /* Create Task 2 */
-//    if (xTaskCreate(vTask2,"Task2", configMINIMAL_STACK_SIZE, NULL, 1, &xTask2Handle) != pdTRUE)
-//    {
-//        /* Task could not be created */
-//        while(1);
-//    }
+
     /* Start Scheduler */
     vTaskStartScheduler();
 
@@ -159,12 +144,6 @@ int main(void)
 /* Task1 */
 void vTask1(void *pvParameters)
 {
-//    if(xSemaphoreTake(sem, (TickType_t)0x01) == pdTRUE)
-//    {
-//        EMAC_LwIP_Main (emacAddress);
-//        xSemaphoreGive(sem);
-//        vTaskDelay(1000);
-//    }
     EMAC_LwIP_Main (emacAddress);
 #if 0
     for(;;){
@@ -191,11 +170,6 @@ void vTask2(void *pvParameters)
             xSemaphoreGive(sem);
             vTaskDelay(501);
         }
-//        /* Taggle GIOB[7] with timer tick */
-//        gioSetBit(gioPORTB, 7, gioGetBit(gioPORTB, 7) ^ 1);
-//
-//        gioSetBit(hetPORT1, 18, gioGetBit(hetPORT1, 18) ^ 1);  //LED on HDK, bottom
-//        vTaskDelay(500);
     }
 }
 /* USER CODE END */

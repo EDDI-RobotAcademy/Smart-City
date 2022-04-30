@@ -274,13 +274,13 @@ void vPortStoreTaskMPUSettings( xMPU_SETTINGS *xMPUSettings, const struct xMEMOR
 		/* No MPU regions are specified so allow access to all of the RAM. */
 		xMPUSettings->xRegion[0].ulRegionBaseAddress = 0x08000000;
 		xMPUSettings->xRegion[0].ulRegionSize        = portMPU_SIZE_512KB | portMPU_REGION_ENABLE;
-		xMPUSettings->xRegion[0].ulRegionAttribute   = portMPU_PRIV_RW_USER_RW_EXEC | portMPU_NORMAL_OIWTNOWA_NONSHARED; //portMPU_NORMAL_OIWBWA_NONSHARED; QJWANG
+		xMPUSettings->xRegion[0].ulRegionAttribute   = portMPU_PRIV_RW_USER_RW_EXEC | portMPU_NORMAL_OIWBWA_NONSHARED;
 
 		/* Re-instate the privileged only RAM region as xRegion[ 0 ] will have
 		just removed the privileged only parameters. */
 		xMPUSettings->xRegion[1].ulRegionBaseAddress = 0x08000000;
 		xMPUSettings->xRegion[1].ulRegionSize        = portMPU_SIZE_4KB | portMPU_REGION_ENABLE;
-		xMPUSettings->xRegion[1].ulRegionAttribute   = portMPU_PRIV_RW_USER_NA_NOEXEC | portMPU_NORMAL_OIWTNOWA_NONSHARED; //portMPU_NORMAL_OIWBWA_NONSHARED;
+		xMPUSettings->xRegion[1].ulRegionAttribute   = portMPU_PRIV_RW_USER_NA_NOEXEC | portMPU_NORMAL_OIWBWA_NONSHARED;
 
 /* USER CODE BEGIN (7) */
 /* USER CODE END */
