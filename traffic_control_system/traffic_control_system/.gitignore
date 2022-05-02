@@ -1,0 +1,11 @@
+#Debug folder
+/Debug/
+
+#.settings folder
+/.settings/
+
+#.txt files
+*.txt
+
+#.pdf files
+*.pdf
