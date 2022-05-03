@@ -15,9 +15,12 @@
 #include "lwiplib.h"
 #include "lwip/inet.h"
 
-/*
- * city_sys는 추후 시스템 관리쪽으로 옮겨야함
- */
+#define BROADCAST 1
+#define UNICAST 0
+
+#define PRJ_UDP 1
+#define PRJ_TCP 0
+
 typedef enum eddi_smartcity_sys city_sys;
 enum eddi_smartcity_sys{
     Vehicle = 1,
@@ -52,6 +55,5 @@ struct protocol_packt
 };
 
 typedef struct protocol_packt protocol_packt;
-void prj_udp_init(const uint8_t macaddr);
 
 #endif /* EDDI_COM_PRJ_ETHERNET_INCLUDE_PRJ_ETHERNET_H_ */

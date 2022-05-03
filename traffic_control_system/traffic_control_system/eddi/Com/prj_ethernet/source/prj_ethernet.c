@@ -5,50 +5,35 @@
  *      Author: son
  */
 #include "prj_ethernet.h"
+#include "prj_network.h"
 
-/*
- * @parameter
- * dst_id : 수신받는 장비의 ID
- * id : 도로통제 시스템의 하위 컴포넌트 ID
- * act : id 발급요청인지 상태전송인지 구분
- * cmd : id 발급의 경우 2, 그 외 사용자 정의
- * length_num : id 발급의 경우 발급할 데이터의 개수, 상태 전송의 경우 데이터 길이
- * data : id 발급의 경우 각 컴포넌트의 고정된 id정보, 상태 전송의 경우 각 컴포넌트의 상태정보
- */
-typedef struct _com_payload com_payload;
-struct _com_payload
+#if PRJ_UDP
+struct udp_pcb *pcb;
+void udp_tx_handler(network *info)
 {
-    city_sys dst_id;
-    component id;
-    void *act;
-    void *cmd;
-    uint32_t length_num;
-    void *data;
-};
-/*
- * ethernet_init : lwip 초기화와 mac address 초기화를 수행한다
- */
-void prj_ethernet_init(const uint8_t macaddr)
-{
-    ;
-}
-void enqueue_payload()
-{
-    ;
-}
-/*
- * ethernet_client_tx : src와 dst IP주소와 스마트시티 프로토콜 패킷을 전달받는다
- * ethernet 구성
- * 암호화장비로 send
- */
-void ethernet_client_tx(struct ip_addr *src, struct ip_addr *dst, void **packet)
-{
-    ;
-}
-void ethernet_client_rx(void)
-{
-    ;
+    pcb = udp_new();
+
+#if BROADCAST
+    udp_bind(pcb, IPADDR_ANY, info->dst.port);
+#else
+    udp_bind(pcb, info->src.ip, info->src.port);
+    udp_connect(pcb, info->dst.ip, info->dst.port);
+#endif
 }
 
+void udp_tx(void *pkt)
+{
+    struct pbuf *p;
 
+    p = pbuf_alloc(PBUF_TRANSPORT, sizeof(pkt), PBUF_RAM);
+    memcpy(p->payload, pkt, sizeof(pkt));
 
+    udp_send(pcb, p);
+
+    pbuf_free(p);
+}
+
+/*TCP/IP 추가*/
+#else
+
+#endif
