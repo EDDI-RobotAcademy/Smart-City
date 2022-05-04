@@ -13,7 +13,7 @@
 
 typedef struct net_info net_info;
 struct net_info{
-    ip_addr_t ip;
+    uint32_t ip;
     u16_t port;
 };
 

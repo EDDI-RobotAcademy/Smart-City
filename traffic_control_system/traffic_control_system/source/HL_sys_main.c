@@ -60,6 +60,12 @@
 #include "HL_gio.h"
 #include "HL_esm.h"
 
+#include <prj_ethernet/include/lwipopts.h>
+#include "lwiplib.h"
+#include "lwip/inet.h"
+
+#include "prj_network.h"
+
 #ifdef DEBUG
 void
 __error__(char *pcFilename, uint32_t ui32Line)
@@ -69,12 +75,17 @@ __error__(char *pcFilename, uint32_t ui32Line)
 
 void vTask1(void *pvParameters);
 extern void vTask2(void *pvParameters);
+void vTask3(void *pvParameters);
+
 extern void vApplicationStackOverflowHook(xTaskHandle *pxTask, signed char *pcTaskName );
 extern void EMAC_LwIP_Main (uint8_t * emacAddress);
+extern void udp_tx_handler(network *info);
+extern void udp_tx(void *pkt);
 
 /* Define Task Handles */
 xTaskHandle xTask1Handle;
 xTaskHandle xTask2Handle;
+xTaskHandle xTask3Handle;
 
 /* Define semaphore Handles*/
 SemaphoreHandle_t sem;
@@ -116,14 +127,24 @@ int main(void)
     xSemaphoreGive(sem);
 
     /* Create Task 1 */
-    if (xTaskCreate(vTask1,"Task1", configMINIMAL_STACK_SIZE, NULL,  ((configMAX_PRIORITIES-1)|portPRIVILEGE_BIT), &xTask1Handle) != pdTRUE)
+    if (xTaskCreate(vTask1,"Task1", configMINIMAL_STACK_SIZE, NULL,
+                    ((configMAX_PRIORITIES-1)|portPRIVILEGE_BIT), &xTask1Handle) != pdTRUE)
     {
         /* Task could not be created */
         while(1);
     }
 
     /* Create Task 2 */
-    if (xTaskCreate(vTask2,"Task2", configMINIMAL_STACK_SIZE, NULL, 1, &xTask2Handle) != pdTRUE)
+    if (xTaskCreate(vTask2,"Task2", configMINIMAL_STACK_SIZE, NULL, 1,
+                    &xTask2Handle) != pdTRUE)
+    {
+        /* Task could not be created */
+        while(1);
+    }
+
+    /* Create Task 3 */
+    if (xTaskCreate(vTask3,"ethernet_tx", configMINIMAL_STACK_SIZE, NULL, 1,
+                    &xTask3Handle) != pdTRUE)
     {
         /* Task could not be created */
         while(1);
@@ -145,7 +166,7 @@ int main(void)
 void vTask1(void *pvParameters)
 {
     EMAC_LwIP_Main (emacAddress);
-#if 0
+#if 1
     for(;;){
         /* Taggle GIOB[6] with timer tick */
         gioSetBit(gioPORTB, 6, gioGetBit(gioPORTB, 6) ^ 1);
@@ -161,15 +182,41 @@ void vTask2(void *pvParameters)
 {
     for(;;)
     {
-        if(xSemaphoreTake(sem, (TickType_t)0x01) == pdTRUE)
-        {
             /* Taggle GIOB[7] with timer tick */
             gioSetBit(gioPORTB, 7, gioGetBit(gioPORTB, 7) ^ 1);
-
             gioSetBit(hetPORT1, 18, gioGetBit(hetPORT1, 18) ^ 1);  //LED on HDK, bottom
+            vTaskDelay(501);
+    }
+}
+
+void vTask3(void *pvParameters)
+{
+
+    uint32_t data = 0x55ff55ff;
+    network net1;
+
+    memset(&net1, 0, sizeof(network));
+
+    net1.dst.port = 7777;
+
+    udp_tx_handler(&net1);
+
+    for(;;)
+    {
+#if 1
+        if(xSemaphoreTake(sem, (TickType_t)0x01) == pdTRUE)
+        {
+            udp_tx(&data);
             xSemaphoreGive(sem);
             vTaskDelay(501);
         }
+#endif
+#if 0
+        taskENTER_CRITICAL();
+        udp_tx(&data);
+        vTaskDelay(501);
+        taskEXIT_CRITICAL();
+#endif
     }
 }
 /* USER CODE END */
