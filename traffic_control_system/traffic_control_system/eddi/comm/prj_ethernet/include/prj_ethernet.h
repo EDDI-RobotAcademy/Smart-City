@@ -29,11 +29,7 @@
 
 #if PRJ_UDP
 extern boolean udp_socket_handler(network *info);
-#if 1
 extern void udp_tx(void *pkt, uint32_t size);
-#else
-void udp_tx(network *info, protocol_request_packt *pkt, uint32_t size);
-#endif
 #else
 #endif
 

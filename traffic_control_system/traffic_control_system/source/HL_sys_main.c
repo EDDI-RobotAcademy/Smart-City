@@ -60,11 +60,7 @@
 #include "HL_gio.h"
 #include "HL_esm.h"
 
-#include <prj_ethernet/include/lwipopts.h>
-#include "lwiplib.h"
-#include "lwip/inet.h"
-
-#include "prj_network.h"
+#include <comm/prj_ethernet/include/prj_ethernet.h>
 
 #ifdef DEBUG
 void
@@ -78,9 +74,7 @@ extern void vTask2(void *pvParameters);
 void vTask3(void *pvParameters);
 
 extern void vApplicationStackOverflowHook(xTaskHandle *pxTask, signed char *pcTaskName );
-extern void EMAC_LwIP_Main (uint8_t * emacAddress);
-extern void udp_tx_handler(network *info);
-extern void udp_tx(void *pkt);
+extern uint32_t EMAC_LwIP_Main (uint8_t * emacAddress);
 
 /* Define Task Handles */
 xTaskHandle xTask1Handle;
@@ -104,7 +98,7 @@ SemaphoreHandle_t sem;
 /* USER CODE END */
 
 uint8	emacAddress[6U] = 	{0x00U, 0x08U, 0xeeU, 0x03U, 0xa6U, 0x6cU};
-uint32 	emacPhyAddress	=	1U;
+uint32_t ipAddr;
 
 int main(void)
 {
@@ -115,13 +109,14 @@ int main(void)
     esmREG->EKR = 0x0000000A;
     esmREG->EKR = 0x00000000;
 
-
     /* Set high end timer GIO port hetPort pin direction to all output */
     gioInit();
     gioSetDirection(gioPORTB, 0xFFFF);
-
     /* Set high end timer GIO port hetPort pin direction to all output */
     gioSetDirection(hetPORT1, 0xFFFFFFFF); //HDK uses NHET for LEDs
+
+    /*lwip Init*/
+    ipAddr = EMAC_LwIP_Main (emacAddress);
 
     sem = xSemaphoreCreateBinary();
     xSemaphoreGive(sem);
@@ -156,67 +151,58 @@ int main(void)
     /* Run forever */
     while(1);
 /* USER CODE END */
-
     return 0;
 }
-
 
 /* USER CODE BEGIN (4) */
 /* Task1 */
 void vTask1(void *pvParameters)
 {
-    EMAC_LwIP_Main (emacAddress);
-#if 1
+    uint32_t data[0];
     for(;;){
         /* Taggle GIOB[6] with timer tick */
         gioSetBit(gioPORTB, 6, gioGetBit(gioPORTB, 6) ^ 1);
-
         /* Taggle HET[1] with timer tick */
         gioSetBit(hetPORT1, 17, gioGetBit(hetPORT1, 17) ^ 1);  //LED on HDK, top left
+
+        taskENTER_CRITICAL();
+        while(!id_issuance_handle((char *)"192.168.0.7", data, sizeof(data)/sizeof(uint32_t)));
+        taskEXIT_CRITICAL();
         vTaskDelay(300);
     }
-#endif
 }
 
 void vTask2(void *pvParameters)
 {
     for(;;)
     {
+        if(xSemaphoreTake(sem, (TickType_t)0x01) == pdTRUE)
+        {
             /* Taggle GIOB[7] with timer tick */
             gioSetBit(gioPORTB, 7, gioGetBit(gioPORTB, 7) ^ 1);
             gioSetBit(hetPORT1, 18, gioGetBit(hetPORT1, 18) ^ 1);  //LED on HDK, bottom
+            xSemaphoreGive(sem);
             vTaskDelay(501);
+        }
     }
 }
 
 void vTask3(void *pvParameters)
 {
-
-    uint32_t data = 0x55ff55ff;
     network net1;
-
     memset(&net1, 0, sizeof(network));
 
+    net1.src.port = 1111;
     net1.dst.port = 7777;
 
-    udp_tx_handler(&net1);
+    while(!udp_socket_handler(&net1));
 
     for(;;)
     {
-#if 1
-        if(xSemaphoreTake(sem, (TickType_t)0x01) == pdTRUE)
-        {
-            udp_tx(&data);
-            xSemaphoreGive(sem);
-            vTaskDelay(501);
-        }
-#endif
-#if 0
         taskENTER_CRITICAL();
-        udp_tx(&data);
-        vTaskDelay(501);
+        udp_tx(&id_issue_pkt, id_issue_pkt.total_length);
         taskEXIT_CRITICAL();
-#endif
+        vTaskDelay(501);
     }
 }
 /* USER CODE END */
