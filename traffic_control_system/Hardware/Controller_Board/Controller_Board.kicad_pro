@@ -322,8 +322,8 @@
       ""
     ],
     [
-      "4252edd9-dd80-418f-a448-e002aa1873ad",
-      "TMS570_Connector"
+      "27ea2891-5f06-4f55-a840-28afaf8cbd21",
+      "mux_control"
     ],
     [
       "2cb34100-0940-4587-8d07-91ee950a47f1",
@@ -340,6 +340,18 @@
     [
       "07ee1827-c3b5-4503-9cee-623c5e35dc45",
       "sol_valve_adc"
+    ],
+    [
+      "e7df5fc4-a0c7-417a-a5b2-da7b370c3177",
+      "pump_motor_drive"
+    ],
+    [
+      "0afbb687-511c-4bcb-b85b-1cea1f11ef65",
+      "traffic_lamp_drive"
+    ],
+    [
+      "bd90603f-b505-452a-a01b-b198b3787691",
+      "cylinder_pos_sening"
     ]
   ],
   "text_variables": {}

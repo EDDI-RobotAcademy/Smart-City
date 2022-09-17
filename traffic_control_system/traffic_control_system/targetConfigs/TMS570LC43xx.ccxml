@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configurations XML_version="1.2" id="configurations_0">
-                                                    
+                                                            
+    
+    
     
     
     
@@ -13,7 +15,9 @@
     
     
     <configuration XML_version="1.2" id="Texas Instruments XDS100v2 USB Debug Probe_0">
-                                                                                                        
+                                                                                                                        
+        
+        
         
         
         
@@ -26,7 +30,9 @@
         
         
         <instance XML_version="1.2" desc="Texas Instruments XDS100v2 USB Debug Probe_0" href="connections/TIXDS100v2_Connection.xml" id="Texas Instruments XDS100v2 USB Debug Probe_0" xml="TIXDS100v2_Connection.xml" xmlpath="connections"/>
-                                                                                                        
+                                                                                                                        
+        
+        
         
         
         
@@ -39,7 +45,9 @@
         
         
         <connection XML_version="1.2" id="Texas Instruments XDS100v2 USB Debug Probe_0">
-                                                                                                                                                            
+                                                                                                                                                                                    
+            
+            
             
             
             
@@ -52,7 +60,9 @@
             
             
             <instance XML_version="1.2" href="drivers/tixds100v2icepick_c.xml" id="drivers" xml="tixds100v2icepick_c.xml" xmlpath="drivers"/>
-                                                                                                                                                            
+                                                                                                                                                                                    
+            
+            
             
             
             
@@ -65,7 +75,9 @@
             
             
             <instance XML_version="1.2" href="drivers/tixds100v2cs_dap.xml" id="drivers" xml="tixds100v2cs_dap.xml" xmlpath="drivers"/>
-                                                                                                                                                            
+                                                                                                                                                                                    
+            
+            
             
             
             
@@ -78,7 +90,9 @@
             
             
             <instance XML_version="1.2" href="drivers/tixds100v2cortexR.xml" id="drivers" xml="tixds100v2cortexR.xml" xmlpath="drivers"/>
-                                                                                                                                                            
+                                                                                                                                                                                    
+            
+            
             
             
             
@@ -91,7 +105,9 @@
             
             
             <platform XML_version="1.2" id="platform_0">
-                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                
+                
+                
                 
                 
                 
@@ -104,7 +120,9 @@
                 
                 
                 <instance XML_version="1.2" desc="TMS570LC43xx_0" href="devices/tms570lc43xx.xml" id="TMS570LC43xx_0" xml="tms570lc43xx.xml" xmlpath="devices"/>
-                                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+            
+            
             
             
             
@@ -117,7 +135,9 @@
             
             
             </platform>
-                                                                                                                                                        
+                                                                                                                                                                                
+        
+        
         
         
         
@@ -130,7 +150,9 @@
         
         
         </connection>
-                                                                                                    
+                                                                                                                    
+    
+    
     
     
     
@@ -143,7 +165,9 @@
     
     
     </configuration>
-                                                
+                                                        
+
+
 
 
 
