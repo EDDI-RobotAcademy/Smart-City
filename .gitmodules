@@ -1,0 +1,3 @@
+[submodule "traffic_monitor_system/Iguana-detection-on-Nvidia-Jetson-Nano-for-monitoring"]
+	path = traffic_monitor_system/Iguana-detection-on-Nvidia-Jetson-Nano-for-monitoring
+	url = https://github.com/EDDI-RobotAcademy/Iguana-detection-on-Nvidia-Jetson-Nano-for-monitoring
