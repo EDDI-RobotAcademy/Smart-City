@@ -45,7 +45,7 @@ for ((a=0; a<"${#args[@]}"; ++a)); do
 done
 
 cur_loc=$(pwd)
-docker run -it \
+docker run --gpus all -it \
 	--init \
 	--ipc=host \
 	--shm-size=8G \
