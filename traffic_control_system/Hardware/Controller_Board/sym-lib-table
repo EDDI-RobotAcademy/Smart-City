@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name "TrafficControl")(type "KiCad")(uri "${KIPRJMOD}/SchLibrary/TrafficControl.kicad_sym")(options "")(descr ""))
-)
