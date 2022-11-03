@@ -29,12 +29,27 @@ bool open_test(void)
     else { return false; }
 }
 
+bool open_error_test(void)
+{
+	int fd1 = open(SPI-1, 3, 3);
+	int fd2 = open(END+1, 3, 3);
+
+	if(fd1 == OPEN_ERROR && fd2 == OPEN_ERROR)
+		return true;
+	else
+		return false;
+}
+
 TEST(peripheral_common_package, peripheral_call_table) {
     EXPECT_TRUE(peripheral_call_table_test());
 }
 
 TEST(peripheral_package, open) {
     EXPECT_TRUE(open_test());
+}
+
+TEST(peripheral_open_error, open){
+	EXPECT_TRUE(open_error_test());
 }
 
 int main(int argc, char **argv) {
